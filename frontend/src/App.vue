@@ -1,11 +1,26 @@
-<script setup></script>
+<script setup>
+import { onMounted, ref } from 'vue'
+import api from './services/api'
+
+const pegawai = ref([])
+
+onMounted(async () => {
+  try {
+    const response = await api.get('/pegawai')
+    pegawai.value = response.data
+  } catch (error) {
+    console.error(error)
+  }
+})
+</script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <div>
+    <h1>Data Pegawai</h1>
+    <ul>
+      <li v-for="p in pegawai" :key="p.id">
+        {{ p.nama }}
+      </li>
+    </ul>
+  </div>
 </template>
-
-<style scoped></style>
