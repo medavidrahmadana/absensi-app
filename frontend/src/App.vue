@@ -8,6 +8,10 @@
       <router-link to="/kehadiran" class="font-semibold text-gray-700 hover:text-blue-600">
         Kehadiran
       </router-link>
+
+      <router-link to="/laporan" class="font-semibold text-gray-700 hover:text-blue-600">
+        Laporan
+      </router-link>
     </nav>
 
     <router-view />
