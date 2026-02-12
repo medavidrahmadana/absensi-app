@@ -8,7 +8,7 @@ class Pegawai extends Model
 {
     protected $fillable = ['nama', 'email', 'no_hp', 'alamat'];
 
-    public function attendances()
+    public function kehadiran()
     {
         return $this->hasMany(Kehadiran::class);
     }
