@@ -13,7 +13,7 @@ class KehadiranController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'pegawai_id' => 'required|exists:pegawai,id',
+            'pegawai_id' => 'required|exists:pegawais,id',
             'tanggal' => 'required|date',
             'status' => 'required|in:hadir,izin,sakit'
         ]);
