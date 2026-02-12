@@ -20,7 +20,8 @@ class PegawaiController extends Controller
             'nama' => 'required',
             'email' => 'required|email|unique:pegawais,email',
             'no_hp' => 'nullable',
-            'alamat' => 'nullable'
+            'alamat' => 'nullable',
+            'tanggal_masuk' => 'required|date'
         ]);
 
         return Pegawai::create($data);
@@ -42,6 +43,7 @@ class PegawaiController extends Controller
             ],
             'no_hp' => 'nullable',
             'alamat' => 'nullable',
+            'tanggal_masuk' => 'required|date'
         ]);
 
         $pegawai->update($data);

@@ -64,6 +64,7 @@ const batalEdit = () => {
     email: '',
     no_hp: '',
     alamat: '',
+    tanggal_masuk: '',
   }
 }
 
@@ -99,6 +100,7 @@ onMounted(() => {
           placeholder="Alamat"
           class="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
+        <input type="date" v-model="form.tanggal_masuk" class="border rounded-lg px-3 py-2" />
       </div>
 
       <div class="flex items-center gap-3 mb-6">

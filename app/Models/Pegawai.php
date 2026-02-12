@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pegawai extends Model
 {
-    protected $fillable = ['nama', 'email', 'no_hp', 'alamat'];
+    protected $fillable = ['nama', 'email', 'no_hp', 'alamat', 'tanggal_masuk'];
 
     public function kehadiran()
     {

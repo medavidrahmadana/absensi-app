@@ -1,29 +1,42 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import api from '../services/api'
 
-const pegawaiList = ref([])
 const pegawaiId = ref('')
-const bulan = ref('')
-const tahun = ref('')
+const pegawaiList = ref([])
+const periode = ref('')
 const laporan = ref(null)
 
+const today = new Date()
+const maxMonth = today.toISOString().slice(0, 7)
+
+onMounted(() => {
+  periode.value = maxMonth
+  loadPegawai()
+})
+
 const loadPegawai = async () => {
-  const res = await api.get('/pegawai')
-  pegawaiList.value = res.data
+  const response = await api.get('/pegawai')
+  pegawaiList.value = response.data
 }
 
-const getLaporan = async () => {
+const tampilkanLaporan = async () => {
   try {
-    const res = await api.get(`/kehadiran/${pegawaiId.value}/${tahun.value}/${bulan.value}`)
-    laporan.value = res.data
+    if (!pegawaiId.value || !periode.value) {
+      alert('Lengkapi data dulu')
+      return
+    }
+
+    const [year, month] = periode.value.split('-')
+
+    const response = await api.get(`/kehadiran/${pegawaiId.value}/${year}/${month}`)
+
+    laporan.value = response.data
   } catch (error) {
     console.error(error)
-    alert('Gagal mengambil laporan')
+    alert('Gagal memuat laporan')
   }
 }
-
-loadPegawai()
 </script>
 
 <template>
@@ -40,33 +53,31 @@ loadPegawai()
         </select>
 
         <input
-          type="number"
-          v-model="tahun"
-          placeholder="Tahun (contoh: 2026)"
-          class="w-full border rounded-lg px-3 py-2"
-        />
-
-        <input
-          type="number"
-          v-model="bulan"
-          placeholder="Bulan (1-12)"
-          class="w-full border rounded-lg px-3 py-2"
+          type="month"
+          v-model="periode"
+          :max="maxMonth"
+          class="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
 
         <button
-          @click="getLaporan"
+          @click="tampilkanLaporan"
           class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700"
         >
           Tampilkan Laporan
         </button>
       </div>
 
-      <div v-if="laporan" class="bg-gray-50 p-4 rounded-lg">
-        <p><strong>Total Hari Kerja:</strong> {{ laporan.total_hari_kerja }}</p>
-        <p><strong>Hadir:</strong> {{ laporan.hadir }}</p>
-        <p><strong>Izin:</strong> {{ laporan.izin }}</p>
-        <p><strong>Sakit:</strong> {{ laporan.sakit }}</p>
-        <p><strong>Alpha:</strong> {{ laporan.alpha }}</p>
+      <div v-if="laporan" class="bg-gray-50 p-4 rounded-lg mt-4">
+        <p class="font-semibold">
+          Total Hari Kerja Bulan Ini:
+          {{ laporan.total_hari_kerja_bulan }}
+          (Hari Kerja Aktif: {{ laporan.hari_kerja_aktif }} Hari)
+        </p>
+
+        <p>Hadir: {{ laporan.hadir }}</p>
+        <p>Izin: {{ laporan.izin }}</p>
+        <p>Sakit: {{ laporan.sakit }}</p>
+        <p>Alpha: {{ laporan.alpha }}</p>
       </div>
     </div>
   </div>
