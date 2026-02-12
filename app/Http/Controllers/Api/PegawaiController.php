@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Pegawai;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class PegawaiController extends Controller
 {
@@ -17,7 +18,7 @@ class PegawaiController extends Controller
     {
         $data = $request->validate([
             'nama' => 'required',
-            'email' => 'required|email|unique:pegawai',
+            'email' => 'required|email|unique:pegawais,email',
             'no_hp' => 'nullable',
             'alamat' => 'nullable'
         ]);
@@ -32,7 +33,19 @@ class PegawaiController extends Controller
 
     public function update(Request $request, Pegawai $pegawai)
     {
-        $pegawai->update($request->all());
+        $data = $request->validate([
+            'nama' => 'required',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('pegawais')->ignore($pegawai->id),
+            ],
+            'no_hp' => 'nullable',
+            'alamat' => 'nullable',
+        ]);
+
+        $pegawai->update($data);
+
         return $pegawai;
     }
 
